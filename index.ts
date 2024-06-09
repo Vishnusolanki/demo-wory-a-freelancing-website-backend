@@ -1,16 +1,15 @@
-const mongoose = require('mongoose');
-const app = require('./app');
-const config = require('./src/config/config');
-const logger = require('./src/config/logger');
+import mongoose from 'mongoose';
+import app from './app';
+import config from './src/config/config';
+import logger from './src/config/logger';
 
 // Set strictQuery to false if you want to prepare for the default change in Mongoose 7
 mongoose.set('strictQuery', false);
 
-let server;
+let server: any;
 
 // Connect to MongoDB
 mongoose.connect(config.mongoose.url)
-// mongoose.connect('mongodb://127.0.0.1:27017/mydatabase', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     logger.info('Connected to MongoDB');
     // Start the Express server after successful MongoDB connection
@@ -18,20 +17,20 @@ mongoose.connect(config.mongoose.url)
       logger.info(`Server is listening on port ${config.port}`);
     });
   })
-  .catch((error) => {
+  .catch((error: Error) => {
     // Handle MongoDB connection error
     logger.error('Error connecting to MongoDB:', error);
     process.exit(1); // Exit the process if unable to connect to MongoDB
   });
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', (error: Error) => {
   logger.error('Uncaught Exception:', error);
   exitHandler();
 });
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason: any, promise: any) => {
   logger.error('Unhandled Rejection:', reason);
   exitHandler();
 });
